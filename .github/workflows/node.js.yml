@@ -28,4 +28,4 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: make lint
-    - run: npx -n '--experimental-vm-modules' jest
+    - run: make test
