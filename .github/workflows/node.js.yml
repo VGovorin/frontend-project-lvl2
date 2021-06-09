@@ -37,5 +37,14 @@ jobs:
         make lint
     - name: Run test
       # Run test
-      run: |
-        make test
+      env:
+        global:
+        - CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }}
+      before_script:
+        - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        - chmod +x ./cc-test-reporter
+        - ./cc-test-reporter before-build
+      script:
+        - make test-coverage
+      after_script:
+        - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT 
