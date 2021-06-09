@@ -9,4 +9,4 @@ https://asciinema.org/connect/dc5e7a70-0c0d-4d78-993f-4c03220150b8
 
 [![Node CI](https://github.com/VGovorin/frontend-project-lvl2/actions/workflows/node.js.yml/badge.svg)](https://github.com/VGovorin/frontend-project-lvl2/actions)
 
-[![Build Status](https://travis-ci.org/VGovorin/frontend-project-lvl2.svg?branch=main)](https://travis-ci.org/VGovorin/frontend-project-lvl2)
+[![Build Status](https://travis-ci.com/VGovorin/frontend-project-lvl2.svg?branch=main)](https://travis-ci.com/VGovorin/frontend-project-lvl2)
