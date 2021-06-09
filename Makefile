@@ -11,4 +11,9 @@ lint:
 		npx eslint .
 
 test:
-		node --experimental-vm-modules "node_modules/.bin/jest"
+		npm test
+
+test-coverage:
+		npm test --coverage --coverageProvider=v8
+
+:PHONY: test
