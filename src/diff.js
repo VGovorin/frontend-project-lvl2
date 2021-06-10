@@ -1,23 +1,17 @@
 import _ from 'lodash';
-import * as fs from 'fs';
-
-const readFile = (filePath) => {
-  const file = fs.readFileSync(filePath);
-  const parseFile = JSON.parse(file);
-  return parseFile;
-};
+import parser from './parser.js';
 
 const getUnionKeys = (filePath1, filepath2) => {
-  const obj1 = readFile(filePath1);
-  const obj2 = readFile(filepath2);
+  const obj1 = parser(filePath1);
+  const obj2 = parser(filepath2);
   return _.union(Object.keys(obj1), Object.keys(obj2));
 };
 
 const diff = (filePath1, filepath2) => {
   const unionKeys = getUnionKeys(filePath1, filepath2);
   const sortedKeysByAlphabet = _.sortBy(unionKeys);
-  const obj1 = readFile(filePath1);
-  const obj2 = readFile(filepath2);
+  const obj1 = parser(filePath1);
+  const obj2 = parser(filepath2);
   const data = sortedKeysByAlphabet.reduce((acc, key) => {
     const valueObj1 = obj1[key];
     const valueObj2 = obj2[key];
