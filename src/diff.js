@@ -1,30 +1,51 @@
 import _ from 'lodash';
-import parser from './parser.js';
 
-const getUnionKeys = (filePath1, filepath2) => {
-  const obj1 = parser(filePath1);
-  const obj2 = parser(filepath2);
-  return _.union(Object.keys(obj1), Object.keys(obj2));
-};
+const getUnionKeys = (obj1, obj2) => _.union(Object.keys(obj1), Object.keys(obj2));
 
-const diff = (filePath1, filepath2) => {
-  const unionKeys = getUnionKeys(filePath1, filepath2);
-  const sortedKeysByAlphabet = _.sortBy(unionKeys);
-  const obj1 = parser(filePath1);
-  const obj2 = parser(filepath2);
-  const data = sortedKeysByAlphabet.reduce((acc, key) => {
-    const valueObj1 = obj1[key];
-    const valueObj2 = obj2[key];
-    const isHaveObj1Value = _.has(obj1, key);
-    const isHaveObj2Value = _.has(obj2, key);
-    if (isHaveObj1Value && isHaveObj2Value) {
-      return valueObj1 === valueObj2 ? acc.concat(`   ${key}: ${valueObj1}\n`)
-        : acc.concat(` - ${key}: ${valueObj1}\n + ${key}: ${valueObj2}\n`);
+const diff = (data1, data2) => {
+  const unionKeys = getUnionKeys(data1, data2);
+  const sortedKeys = _.sortBy(unionKeys);
+  const result = sortedKeys.map((key) => {
+    const valueObj1 = data1[key];
+    const valueObj2 = data2[key];
+    const isHaveObj1Value = _.has(data1, key);
+    const isHaveObj2Value = _.has(data2, key);
+    if (_.isPlainObject(valueObj1) && _.isPlainObject(valueObj2)) {
+      return {
+        key,
+        value: diff(valueObj1, valueObj2),
+        type: 'unchanged',
+      };
     }
-    return isHaveObj1Value ? acc.concat(` - ${key}: ${valueObj1}\n`)
-      : acc.concat(` + ${key}: ${valueObj2}\n`);
-  }, '');
-  return `{\n${data}}`;
+    if (valueObj1 === valueObj2) {
+      return {
+        key,
+        value: valueObj1,
+        type: 'unchanged',
+      };
+    }
+    if (isHaveObj1Value && !isHaveObj2Value) {
+      return {
+        key,
+        value: valueObj1,
+        type: 'deleted',
+      };
+    }
+    if (!isHaveObj1Value && isHaveObj2Value) {
+      return {
+        key,
+        value: valueObj2,
+        type: 'added',
+      };
+    }
+    return {
+      key,
+      oldValue: valueObj1,
+      newValue: valueObj2,
+      type: 'modified',
+    };
+  });
+  return result;
 };
 
 export default diff;
