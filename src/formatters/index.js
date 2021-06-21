@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import flat from './plain.js';
 import stringfy from './stylish.js';
+import json from './json.js';
 
 const formatters = {
   plain: flat,
   stylish: stringfy,
+  json: json,
 };
 
 export default (format) => {

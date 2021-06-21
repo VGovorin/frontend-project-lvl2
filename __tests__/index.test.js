@@ -1,7 +1,7 @@
 import { test, expect } from '@jest/globals';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import diff from '../src/diff.js';
+import diff from '../src/genDiff.js';
 import parse from '../src/parser.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -166,5 +166,130 @@ Property 'group3' was added with value: [complex value]`;
   const data1 = parse(file1);
   const data2 = parse(file2);
   const result = diff(data1, data2, 'plain');
+  expect(result).toEqual(string);
+});
+
+test('test json format', () => {
+  const string = `[
+  {
+    "key": "common",
+    "value": [
+      {
+        "key": "follow",
+        "value": false,
+        "type": "added"
+      },
+      {
+        "key": "setting1",
+        "value": "Value 1",
+        "type": "unchanged"
+      },
+      {
+        "key": "setting2",
+        "value": 200,
+        "type": "deleted"
+      },
+      {
+        "key": "setting3",
+        "oldValue": true,
+        "newValue": null,
+        "type": "modified"
+      },
+      {
+        "key": "setting4",
+        "value": "blah blah",
+        "type": "added"
+      },
+      {
+        "key": "setting5",
+        "value": {
+          "key5": "value5"
+        },
+        "type": "added"
+      },
+      {
+        "key": "setting6",
+        "value": [
+          {
+            "key": "doge",
+            "value": [
+              {
+                "key": "wow",
+                "oldValue": "",
+                "newValue": "so much",
+                "type": "modified"
+              }
+            ],
+            "type": "unchanged"
+          },
+          {
+            "key": "key",
+            "value": "value",
+            "type": "unchanged"
+          },
+          {
+            "key": "ops",
+            "value": "vops",
+            "type": "added"
+          }
+        ],
+        "type": "unchanged"
+      }
+    ],
+    "type": "unchanged"
+  },
+  {
+    "key": "group1",
+    "value": [
+      {
+        "key": "baz",
+        "oldValue": "bas",
+        "newValue": "bars",
+        "type": "modified"
+      },
+      {
+        "key": "foo",
+        "value": "bar",
+        "type": "unchanged"
+      },
+      {
+        "key": "nest",
+        "oldValue": {
+          "key": "value"
+        },
+        "newValue": "str",
+        "type": "modified"
+      }
+    ],
+    "type": "unchanged"
+  },
+  {
+    "key": "group2",
+    "value": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
+    },
+    "type": "deleted"
+  },
+  {
+    "key": "group3",
+    "value": {
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      },
+      "fee": 100500
+    },
+    "type": "added"
+  }
+]`;
+  const file1 = getFixturePath('fileTree1.json');
+  const file2 = getFixturePath('fileTree2.json');
+  const data1 = parse(file1);
+  const data2 = parse(file2);
+  const result = diff(data1, data2, 'json');
   expect(result).toEqual(string);
 });
