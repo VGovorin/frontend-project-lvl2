@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import getFormatter from './formatters/index.js';
 
 const getUnionKeys = (obj1, obj2) => _.union(Object.keys(obj1), Object.keys(obj2));
 
