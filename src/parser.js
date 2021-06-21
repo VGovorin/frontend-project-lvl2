@@ -5,12 +5,8 @@ import fs from 'fs';
 export default (filepath) => {
   const data = fs.readFileSync(filepath);
   const format = path.extname(filepath);
-  let parse;
-  if (format === '.json') {
-    parse = JSON.parse;
-  }
   if (format === '.yaml' || format === '.yml') {
-    parse = yaml.load;
+    return yaml.load(data);
   }
-  return parse(data);
+  return JSON.parse(data);
 };

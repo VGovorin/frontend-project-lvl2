@@ -17,20 +17,19 @@ const plain = (data) => {
       const { value } = obj;
       const { type } = obj;
       const meta = path.length === 0 ? `${key}` : `${path.concat(`.${key}`)}`;
-      let line;
       if (Array.isArray(value)) {
-        line = iter(value, meta);
+        return iter(value, meta);
       }
       if (type === 'added') {
-        line = `Property '${meta}' was added with value: ${normalizeType(value)}`;
+        return `Property '${meta}' was added with value: ${normalizeType(value)}`;
       }
       if (type === 'deleted') {
-        line = `Property '${meta}' was removed`;
+        return `Property '${meta}' was removed`;
       }
       if (type === 'modified') {
-        line = `Property '${meta}' was updated. From ${normalizeType(obj.oldValue)} to ${normalizeType(obj.newValue)}`;
+        return `Property '${meta}' was updated. From ${normalizeType(obj.oldValue)} to ${normalizeType(obj.newValue)}`;
       }
-      return line;
+      return [];
     });
     return result
       .filter((el) => el !== undefined)
