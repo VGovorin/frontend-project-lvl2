@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import { Command } from 'commander/esm.mjs';
-import diff from '../index.js';
-import parse from '../src/parser.js';
+import genDiff from '../index.js';
 
 const program = new Command();
 
@@ -13,9 +12,7 @@ program
   .option('-f, --format [type]', 'output format', 'stylish');
 
 program.action((filepath1, filepath2) => {
-  const data1 = parse(filepath1);
-  const data2 = parse(filepath2);
-  const result = diff(data1, data2, program.opts().format);
+  const result = genDiff(filepath1, filepath2, program.opts().format);
   console.log(result);
 });
 
