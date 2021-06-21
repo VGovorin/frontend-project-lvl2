@@ -3,7 +3,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import diff from '../src/diff.js';
 import parse from '../src/parser.js';
-import stringify from '../src/stylish.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +23,7 @@ test('diff', () => {
   const data1 = parse(file1);
   const data2 = parse(file2);
   const result = diff(data1, data2);
-  expect(stringify(result)).toEqual(string);
+  expect(result).toEqual(string);
 });
 
 test('test yaml format', () => {
@@ -41,7 +40,7 @@ test('test yaml format', () => {
   const data1 = parse(file1);
   const data2 = parse(file2);
   const result = diff(data1, data2);
-  expect(stringify(result)).toEqual(string);
+  expect(result).toEqual(string);
 });
 
 test('test recursion compare json formate', () => {
@@ -94,7 +93,7 @@ test('test recursion compare json formate', () => {
   const data1 = parse(file1);
   const data2 = parse(file2);
   const result = diff(data1, data2);
-  expect(stringify(result)).toEqual(string);
+  expect(result).toEqual(string);
 });
 
 test('test recursion compare yaml formate', () => {
@@ -147,5 +146,25 @@ test('test recursion compare yaml formate', () => {
   const data1 = parse(file1);
   const data2 = parse(file2);
   const result = diff(data1, data2);
-  expect(stringify(result)).toEqual(string);
+  expect(result).toEqual(string);
+});
+
+test('test plain format', () => {
+  const string = `Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
+Property 'common.setting3' was updated. From true to null
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was updated. From '' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'group1.baz' was updated. From 'bas' to 'bars'
+Property 'group1.nest' was updated. From [complex value] to 'str'
+Property 'group2' was removed
+Property 'group3' was added with value: [complex value]`;
+  const file1 = getFixturePath('fileTree1.json');
+  const file2 = getFixturePath('fileTree2.json');
+  const data1 = parse(file1);
+  const data2 = parse(file2);
+  const result = diff(data1, data2, 'plain');
+  expect(result).toEqual(string);
 });

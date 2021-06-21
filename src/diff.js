@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import getFormatter from './formatters/index.js';
 
 const getUnionKeys = (obj1, obj2) => _.union(Object.keys(obj1), Object.keys(obj2));
 
@@ -48,4 +49,11 @@ const diff = (data1, data2) => {
   return result;
 };
 
-export default diff;
+const genDiff = (file1, file2, format = 'stylish') => {
+  const formatter = getFormatter(format);
+  const data = diff(file1, file2);
+  const result = formatter(data);
+  return result;
+};
+
+export default genDiff;

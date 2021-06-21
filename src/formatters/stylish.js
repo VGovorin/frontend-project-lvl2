@@ -25,7 +25,7 @@ const bypassObject = (obj, replacer = ' ', spacesCount = 4, currentDepth = 1) =>
   return iter(obj, currentDepth);
 };
 
-const stringify = (data) => {
+const stylish = (data) => {
   const iter = (currentValue, depth) => {
     const space = ' ';
     const spacesCount = 4;
@@ -69,4 +69,4 @@ const stringify = (data) => {
   return iter(data, 1);
 };
 
-export default stringify;
+export default stylish;
